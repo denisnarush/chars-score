@@ -1,8 +1,8 @@
 export class G {
 
     constructor() {
-        const width  = 26 * 9.6;
-        const height = 170;
+        const width  = 40 * 9.6;
+        const height = 30 * 9.6;
 
         this.width = width;
         this.widthCenter = width / 2;
