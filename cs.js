@@ -170,6 +170,7 @@ function updateChars() {
 }
 // Restart
 function restart() {
+    T = performance.now();
     KEY = "";
     CHARS = [];
     SCORE = 0;
