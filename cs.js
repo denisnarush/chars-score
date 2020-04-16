@@ -72,7 +72,7 @@ const STATES = {
             this.ctx.textAlign = "left";
             this.ctx.textBaseline = "bottom";
             this.ctx.rect(0, this.height - 16 * 1.1, this.width - 0.5, 16 * 1.025);
-            this.ctx.fillText(`CPM: ${Math.floor(SCORE / 10 + CPM)}, SCORE:${SCORE}`, 2, this.height);
+            this.ctx.fillText(`CPM:${Math.floor(SCORE / 10 + CPM)}, SCORE:${SCORE}`, 2, this.height);
             this.ctx.strokeStyle = "white";
             this.ctx.stroke();
             this.ctx.closePath();
