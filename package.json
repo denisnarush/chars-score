@@ -1,12 +1,10 @@
 {
   "name": "chars-score",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Chars shooter game",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Denis Narush <child.denis@gmail.com>",
   "license": "ISC"
 }
