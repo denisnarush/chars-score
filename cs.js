@@ -253,30 +253,34 @@ function updateChars() {
         // Draw Char
         this.ctx.fillText(`${char.v}`, char.x, char.y);
     });
-    // Draw 0-index Char
-    this.ctx.fillText(`${CHARS[0].v}`, CHARS[0].x, CHARS[0].y);
-    this.ctx.closePath();
 
     // Return if no key
     if (!KEY) {
         return false;
     }
     // Removing char
-    const index = CHARS.findIndex( char => KEY === char.v);
+    const index = CHARS.findIndex( char => KEY === char.v );
     // Clean key
-    KEY = "";
+    KEY = undefined;
 
     /* YEASY LVL */
     // You can shoot at any chars
-    if (index != -1 && MODE === 0) {
-        CHARS.splice(CHARS.findIndex( char => KEY === char.v), 1);
-    }
+    if (index !== -1) {
+        CHARS.splice(index, 1);
+    } if (MODE == 0) { return false; }
+
+    // Draw 0-index Char
+    this.ctx.fillText(`${CHARS[0].v}`, CHARS[0].x, CHARS[0].y);
+    this.ctx.closePath();
+
     /* NORMAL LVL */
     // You can shoot in chars only in fall-up order
     if (index === 0) {
+        debugger;
         SCORE = SCORE + 1;
         CHARS.shift();
     } if (MODE === 1) { return false; }
+
     /* HARD LVL */
     // If you miss game will add new char skipping
     if (index === -1 || index !== 0) {
