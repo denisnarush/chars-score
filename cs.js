@@ -135,18 +135,15 @@ function addChar() {
 }
 // Update Chars
 function updateChars() {
+    // Exit if empty
+    if (!CHARS.length) {
+        return false;
+    }
+    // Time
     const now = performance.now();
-    let bottomCharIndex;
-
+    // Iteration
     CHARS.forEach( (char, i) => {
-        if (KEY === char.v) {
-            if (bottomCharIndex === undefined) {
-                bottomCharIndex = i;
-            }
-            if (char.y > CHARS[i].y) {
-                bottomCharIndex = i;
-            }
-        }
+        // Update char y position
         if (now > char.t + FPS) {
             char.t = char.t + FPS;
             char.y = char.y + 1 / 3;
@@ -161,11 +158,11 @@ function updateChars() {
         this.ctx.fillText(`${char.v}`, char.x, char.y);
         this.ctx.closePath();
     })
-
-    if (bottomCharIndex !== undefined) {
+    // Removing char
+    if (KEY === CHARS[0].v) {
         KEY = "";
         SCORE = SCORE + 1;
-        CHARS.splice(bottomCharIndex, 1);
+        CHARS.shift();
     }
 }
 // Restart
