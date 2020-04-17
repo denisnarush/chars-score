@@ -267,7 +267,7 @@ function updateChars() {
     // You can shoot at any chars
     if (index !== -1) {
         CHARS.splice(index, 1);
-    } if (MODE == 0) { return false; }
+    } if (MODE == 0) { return SCORE = SCORE + 1; }
 
     // Draw 0-index Char
     this.ctx.fillText(`${CHARS[0].v}`, CHARS[0].x, CHARS[0].y);
@@ -276,10 +276,9 @@ function updateChars() {
     /* NORMAL LVL */
     // You can shoot in chars only in fall-up order
     if (index === 0) {
-        debugger;
         SCORE = SCORE + 1;
         CHARS.shift();
-    } if (MODE === 1) { return false; }
+    } if (MODE === 1) { return SCORE = SCORE + 1; }
 
     /* HARD LVL */
     // If you miss game will add new char skipping
