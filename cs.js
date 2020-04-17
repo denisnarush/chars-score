@@ -7,7 +7,9 @@ const CODES = {
     13 : false, // ENTER
     27 : false, // ESC
     32 : false, // SPACE
+    37 : false, // LEFT
     38 : false, // UP
+    39 : false, // RIGHT
     40 : false, // DOWN
 }
 // FPS
@@ -51,7 +53,8 @@ const STATES = {
             // DRAW MENU
             this.ctx.beginPath();
             this.ctx.font = "italic " + this.ctx.font;
-            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} start ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 0 * 1.4);
+            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} start ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
+            this.ctx.fillText(`${MENU_ITEM === 1 ? ">" : ""} options ${MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
             this.ctx.closePath();
         }
     },
@@ -87,6 +90,73 @@ const STATES = {
             updateChars.call(this);
         }
     },
+    "OPTIONS": {
+        update: function () {
+            // ENTER
+            if (CODES["13"] && MENU_ITEM === 1) {
+                CODES["13"] = false;
+                MENU_ITEM = 1;
+                return CSGame.setState(STATES.MENU);
+            }
+            // BACKSPACE
+            if (CODES["8"]) {
+                CODES["8"] = false;
+                MENU_ITEM = 1;
+                return CSGame.setState(STATES.MENU);
+            }
+            // ESC
+            if (CODES["27"]) {
+                CODES["27"] = false;
+                MENU_ITEM = 1;
+                return CSGame.setState(STATES.MENU);
+            }
+            // DOWN
+            if (CODES["40"]) {
+                CODES["40"] = false;
+                MENU_ITEM = MENU_ITEM >= 1 ? 1 : MENU_ITEM + 1;
+            }
+            // LEFT
+            if (CODES["37"]) {
+                CODES["37"] = false;
+                switch (MENU_ITEM) {
+                    case 0: {
+                        CPM = CPM <= 10 ? 10 : CPM - 10;
+                    }
+                }
+            }
+            // UP
+            if (CODES["38"]) {
+                CODES["38"] = false;
+                MENU_ITEM = MENU_ITEM <= 0 ? 0 : MENU_ITEM - 1
+            }
+            // RIGHT 
+            if (CODES["39"]) {
+                CODES["39"] = false;
+                switch (MENU_ITEM) {
+                    case 0: {
+                        CPM = CPM + 10;
+                    }
+                }
+                
+            }
+            // BACKSPACE
+            if (CODES["8"]) {
+                CODES["8"] = false;
+                return CSGame.setState(STATES.MENU);
+            }
+            // ESC
+            if (CODES["27"]) {
+                CODES["27"] = false;
+                return CSGame.setState(STATES.MENU);
+            }
+            // Draw Options
+            this.ctx.beginPath();
+            this.ctx.font = "italic " + this.ctx.font;
+            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} CPM:${CPM} ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
+            this.ctx.fillText(`${MENU_ITEM === 1 ? ">" : ""} return ${MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
+            this.ctx.closePath();
+        }
+    },
     "GAME_OVER": {
         update: function () {
             // BACKSPACE
@@ -115,6 +185,10 @@ function setStateFromMenu() {
             restart();
             return CSGame.setState(STATES.GAME);
         }
+        case 1: {
+            MENU_ITEM = 0;
+            return CSGame.setState(STATES.OPTIONS);
+        }
     }
 }
 // Add Char
@@ -142,11 +216,11 @@ function updateChars() {
     // Time
     const now = performance.now();
     // Iteration
-    CHARS.forEach( (char, i) => {
+    CHARS.forEach( char => {
         // Update char y position
         if (now > char.t + FPS) {
             char.t = char.t + FPS;
-            char.y = char.y + 1 / 3;
+            char.y = char.y + Math.ceil(CPM / 100) / 3;
         }
         // Condition for Game Over
         if (char.y >= this.height - 16) {
