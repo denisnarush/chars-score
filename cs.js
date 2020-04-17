@@ -278,7 +278,7 @@ function updateChars() {
     } if (MODE === 1) { return false; }
     /* HARD LVL */
     // If you miss game will add new char skipping
-    if (index === -1) {
+    if (index === -1 || index !== 0) {
         T = T - 30000 / (Math.floor(SCORE / 10 + CPM));
     } if (MODE === 2) { return false; }
 }
