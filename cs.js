@@ -27,7 +27,8 @@ let T = 0;
 // Char Per Minute
 let CPM = 30;
 // MODE | DIFFICULTY
-let MODE = "NORMAL";
+const MODS = ["EASY", "NORMAL", "HARD"]
+let MODE = 1;
 // STATES
 const STATES = {
     "MENU": {
@@ -37,10 +38,28 @@ const STATES = {
                 CODES["40"] = false;
                 MENU_ITEM = MENU_ITEM >= 1 ? 1 : MENU_ITEM + 1;
             }
+            // LEFT
+            if (CODES["37"]) {
+                CODES["37"] = false;
+                switch (MENU_ITEM) {
+                    case 0: {
+                        MODE = MODE <= 0 ? 0 : MODE - 1;
+                    }
+                }
+            }
             // UP
             if (CODES["38"]) {
                 CODES["38"] = false;
                 MENU_ITEM = MENU_ITEM <= 0 ? 0 : MENU_ITEM - 1
+            }
+            // RIGHT 
+            if (CODES["39"]) {
+                CODES["39"] = false;
+                switch (MENU_ITEM) {
+                    case 0: {
+                        MODE = MODE >= MODS.length - 1 ? MODE = MODS.length - 1 : MODE + 1;
+                    }
+                }
             }
             // ENTER
             if (CODES["13"]) {
@@ -55,7 +74,7 @@ const STATES = {
             // DRAW MENU
             this.ctx.beginPath();
             this.ctx.font = "italic " + this.ctx.font;
-            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} start ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
+            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} start: ${MODS[MODE]} ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
             this.ctx.fillText(`${MENU_ITEM === 1 ? ">" : ""} options ${MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
             this.ctx.closePath();
         }
@@ -139,7 +158,6 @@ const STATES = {
                         CPM = CPM + 10;
                     }
                 }
-                
             }
             // BACKSPACE
             if (CODES["8"]) {
@@ -220,7 +238,7 @@ function updateChars() {
     // Iteration
     this.ctx.beginPath();
     this.ctx.textAlign = "center";
-    this.ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+    this.ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
     CHARS.forEach( char => {
         // Update char y position
         if (now > char.t + FPS) {
@@ -249,7 +267,7 @@ function updateChars() {
 
     /* YEASY LVL */
     // You can shoot at any chars
-    if (index != -1 && MODE === "YEASY") {
+    if (index != -1 && MODE === 0) {
         CHARS.splice(CHARS.findIndex( char => KEY === char.v), 1);
     }
     /* NORMAL LVL */
@@ -257,11 +275,11 @@ function updateChars() {
     if (index === 0) {
         SCORE = SCORE + 1;
         CHARS.shift();
-    } if (MODE === "NORMAL") { return false; }
+    } if (MODE === 1) { return false; }
     /* HARD LVL */
     // If you miss game will add new char skipping
     T = T - 30000 / (Math.floor(SCORE / 10 + CPM));
-    if (MODE === "HARD") { return false; }
+    if (MODE === 2) { return false; }
 }
 // Restart
 function restart() {
