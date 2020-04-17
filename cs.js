@@ -242,7 +242,7 @@ function updateChars() {
             char.y = char.y + speed;
         }
         // Condition for Game Over
-        if (char.y >= this.height - 16) {
+        if (char.y >= this.height) {
             return CSGame.setState(STATES.GAME_OVER);
         };
         // Draw Char
