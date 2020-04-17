@@ -3,11 +3,16 @@ export class G {
     constructor() {
         const width  = 40 * 9.6;
         const height = 30 * 9.6;
+        // FPS
+        const FPS = 1000 / 120;
 
         this.width = width;
         this.widthCenter = width / 2;
         this.height = height;
         this.heightCenter = height / 2;
+
+        this.fps = FPS;
+        this.t = performance.now();
 
         const canvas = document.createElement("canvas");
         canvas.style.imageRendering = "pixelated";
@@ -27,6 +32,7 @@ export class G {
         document.body.style.margin = "0";
         document.body.style.height = "100%";
         document.body.style.width = "100%";
+        document.documentElement.style.cursor = "none";
         document.documentElement.style.padding = "0";
         document.documentElement.style.margin = "0";
         document.documentElement.style.height = "100%";
@@ -41,15 +47,24 @@ export class G {
     }
 
     loop() {
-        this.ctx.beginPath();
-        this.ctx.fillRect(0, 0, this.width, this.height);
-        this.ctx.closePath();
+        const now = performance.now();
+        if (now > this.t + this.fps) {
+            if (now > this.t + this.fps * 3) {
+                this.t = now;
+                return requestAnimationFrame(this.loop.bind(this));
+            } else {
+                this.t = this.t + this.fps;
+            }
 
+            this.ctx.beginPath();
+            this.ctx.fillRect(0, 0, this.width, this.height);
+            this.ctx.closePath();
 
-        this.ctx.save();
-        this.ctx.fillStyle = "white";
-        this.state.update.call(this);
-        this.ctx.restore();
+            this.ctx.save();
+            this.ctx.fillStyle = "white";
+            this.state.update.call(this);
+            this.ctx.restore();
+        }
         requestAnimationFrame(this.loop.bind(this))
     }
 }
