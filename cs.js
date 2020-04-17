@@ -29,42 +29,42 @@ const STATES = {
     "MENU": {
         update: function () {
             // DOWN
-            if (CODES['40']) {
-                CODES['40'] = false;
+            if (CODES["40"]) {
+                CODES["40"] = false;
                 MENU_ITEM = MENU_ITEM >= 1 ? 1 : MENU_ITEM + 1;
             }
             // UP
-            if (CODES['38']) {
-                CODES['38'] = false;
+            if (CODES["38"]) {
+                CODES["38"] = false;
                 MENU_ITEM = MENU_ITEM <= 0 ? 0 : MENU_ITEM - 1
             }
             // ENTER
-            if (CODES['13']) {
-                CODES['13'] = false;
+            if (CODES["13"]) {
+                CODES["13"] = false;
                 return setStateFromMenu();
             }
             // SPACE
-            if (CODES['32']) {
-                CODES['32'] = false;
+            if (CODES["32"]) {
+                CODES["32"] = false;
                 return setStateFromMenu();
             }
             // DRAW MENU
             this.ctx.beginPath();
             this.ctx.font = "italic " + this.ctx.font;
-            this.ctx.fillText(`${MENU_ITEM === 0 ? '>' : ''} start ${MENU_ITEM === 0 ? '<' : ''}`, this.widthCenter, this.heightCenter - 0 * 1.4);
+            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} start ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 0 * 1.4);
             this.ctx.closePath();
         }
     },
     "GAME": {
         update: function () {
             // BACKSPACE
-            if (CODES['8']) {
-                CODES['8'] = false;
+            if (CODES["8"]) {
+                CODES["8"] = false;
                 return CSGame.setState(STATES.MENU);
             }
             // ESC
-            if (CODES['27']) {
-                CODES['27'] = false;
+            if (CODES["27"]) {
+                CODES["27"] = false;
                 return CSGame.setState(STATES.MENU);
             }
             // Draw Panel
@@ -90,13 +90,13 @@ const STATES = {
     "GAME_OVER": {
         update: function () {
             // BACKSPACE
-            if (CODES['8']) {
-                CODES['8'] = false;
+            if (CODES["8"]) {
+                CODES["8"] = false;
                 return CSGame.setState(STATES.MENU);
             }
             // ESC
-            if (CODES['27']) {
-                CODES['27'] = false;
+            if (CODES["27"]) {
+                CODES["27"] = false;
                 return CSGame.setState(STATES.MENU);
             }
             // Draw Menu
@@ -173,19 +173,19 @@ function restart() {
     SCORE = 0;
 }
 
-window.addEventListener('keydown', (event) => {
+window.addEventListener("keydown", (event) => {
     if (event.keyCode in CODES) {
         CODES[event.keyCode] = true;
     }
 })
 
-window.addEventListener('keyup', (event) => {
+window.addEventListener("keyup", (event) => {
     if (event.keyCode in CODES) {
         CODES[event.keyCode] = false;
     }
 })
 
-window.addEventListener('keypress', (event) => {
+window.addEventListener("keypress", (event) => {
     KEY = String.fromCharCode(event.charCode).toUpperCase();
 })
 
