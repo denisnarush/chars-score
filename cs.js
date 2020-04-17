@@ -74,7 +74,7 @@ const STATES = {
             // DRAW MENU
             this.ctx.beginPath();
             this.ctx.font = "italic " + this.ctx.font;
-            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} start: ${MODS[MODE]} ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
+            this.ctx.fillText(`${MENU_ITEM === 0 ? ">" : ""} start: ${MODS[MODE].toLocaleLowerCase()} ${MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
             this.ctx.fillText(`${MENU_ITEM === 1 ? ">" : ""} options ${MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
             this.ctx.closePath();
         }
