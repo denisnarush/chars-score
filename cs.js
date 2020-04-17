@@ -12,6 +12,8 @@ const CODES = {
     39 : false, // RIGHT
     40 : false, // DOWN
 }
+// TITLE
+const TITLE = document.title;
 // SELECTED MENU ITEM
 let MENU_ITEM = 0;
 // SCORE
@@ -71,15 +73,8 @@ const STATES = {
                 CODES["27"] = false;
                 return CSGame.setState(STATES.MENU);
             }
-            // Draw Panel
-            this.ctx.beginPath();
-            this.ctx.textAlign = "left";
-            this.ctx.textBaseline = "bottom";
-            this.ctx.rect(0, this.height - 16 * 1.1, this.width - 0.5, 16 * 1.025);
-            this.ctx.fillText(`CPM:${Math.floor(SCORE / 10 + CPM)} SCORE:${SCORE}`, 2, this.height);
-            this.ctx.strokeStyle = "white";
-            this.ctx.stroke();
-            this.ctx.closePath();
+            // Score to the title
+            document.title = `${TITLE} ${Math.floor(SCORE / 10 + CPM)}/${SCORE}`;
             // Now
             const now = Math.floor(performance.now());
             // Adding Char ?
@@ -254,6 +249,14 @@ function updateChars() {
         this.ctx.fillText(`${char.v}`, char.x, char.y);
     });
 
+
+    // Highlight last char in NORMAL and HARD mode
+    if (MODE !== 0) {
+        this.ctx.fillText(`${CHARS[0].v}`, CHARS[0].x, CHARS[0].y);
+    }
+
+    this.ctx.closePath();
+
     // Return if no key
     if (!KEY) {
         return false;
@@ -263,28 +266,38 @@ function updateChars() {
     // Clean key
     KEY = undefined;
 
-    /* YEASY LVL */
-    // You can shoot at any chars
-    if (index !== -1) {
-        CHARS.splice(index, 1);
-    } if (MODE == 0) { return SCORE = SCORE + 1; }
+    switch (MODE) {
+/* YEASY LVL */
+        case 0: {
+            // You can shoot at any chars
+            if (index !== -1) {
+                CHARS.splice(index, 1);
+                SCORE = SCORE + 1;
+            }
+            return
+        }
+/* NORMAL LVL */
+        case 1: {
+            // You can shoot in chars only in fall-up order
+            if (index === 0) {
+                CHARS.shift();
+                SCORE = SCORE + 1;
+            }
+            return
+        }
+/* HARD LVL */
+        case 2: {
+            // If you miss game will add new char skipping
+            if (index === -1 || index !== 0) {
+                T = now - 90000 / (Math.floor(SCORE / 10 + CPM));
+            } else if (index === 0) {
+                CHARS.shift();
+                SCORE = SCORE + 1;
+            }
+            return
+        }
+    }
 
-    // Draw 0-index Char
-    this.ctx.fillText(`${CHARS[0].v}`, CHARS[0].x, CHARS[0].y);
-    this.ctx.closePath();
-
-    /* NORMAL LVL */
-    // You can shoot in chars only in fall-up order
-    if (index === 0) {
-        SCORE = SCORE + 1;
-        CHARS.shift();
-    } if (MODE === 1) { return SCORE = SCORE + 1; }
-
-    /* HARD LVL */
-    // If you miss game will add new char skipping
-    if (index === -1 || index !== 0) {
-        T = now - 90000 / (Math.floor(SCORE / 10 + CPM));
-    } if (MODE === 2) { return false; }
 };
 // Restart
 function restart() {
