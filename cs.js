@@ -26,6 +26,8 @@ let KEY = "";
 let T = 0;
 // Char Per Minute
 let CPM = 30;
+// MODE | DIFFICULTY
+let MODE = "NORMAL";
 // STATES
 const STATES = {
     "MENU": {
@@ -195,13 +197,13 @@ function setStateFromMenu() {
 function addChar() {
     // CHAR
     const char = {
-        // 0 - 20 col
+        // 0 - 40 col
         x: Math.floor(Math.random() * 40 + 1) * 9.6 - 4.8,
         // TOP
         y: 0,
-        // 65 - 90 A - Z
+        // 65 - 90 is A - Z
         v: String.fromCharCode(Math.floor(Math.random() * 26 + 65)),
-        // CREATING TIME
+        // TIME
         t: performance.now()
     };
     // ADD
@@ -216,6 +218,9 @@ function updateChars() {
     // Time
     const now = performance.now();
     // Iteration
+    this.ctx.beginPath();
+    this.ctx.textAlign = "center";
+    this.ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
     CHARS.forEach( char => {
         // Update char y position
         if (now > char.t + FPS) {
@@ -227,17 +232,36 @@ function updateChars() {
             return CSGame.setState(STATES.GAME_OVER);
         };
         // Draw Char
-        this.ctx.beginPath();
-        this.ctx.textAlign = "center";
         this.ctx.fillText(`${char.v}`, char.x, char.y);
-        this.ctx.closePath();
     })
+    // Draw 0-index Char
+    this.ctx.fillText(`${CHARS[0].v}`, CHARS[0].x, CHARS[0].y);
+    this.ctx.closePath();
+
+    // Return if no key
+    if (!KEY) {
+        return false;
+    }
     // Removing char
-    if (KEY === CHARS[0].v) {
-        KEY = "";
+    const index = CHARS.findIndex( char => KEY === char.v);
+    // Clean key
+    KEY = "";
+
+    /* YEASY LVL */
+    // You can shoot at any chars
+    if (index != -1 && MODE === "YEASY") {
+        CHARS.splice(CHARS.findIndex( char => KEY === char.v), 1);
+    }
+    /* NORMAL LVL */
+    // You can shoot in chars only in fall-up order
+    if (index === 0) {
         SCORE = SCORE + 1;
         CHARS.shift();
-    }
+    } if (MODE === "NORMAL") { return false; }
+    /* HARD LVL */
+    // If you miss game will add new char skipping
+    T = T - 30000 / (Math.floor(SCORE / 10 + CPM));
+    if (MODE === "HARD") { return false; }
 }
 // Restart
 function restart() {
