@@ -1,0 +1,21 @@
+{
+    "_CHARS": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+
+    "EN": "EN",
+    "RU": "РУ",
+
+    "EASY": "EASY",
+    "NORMAL": "NORMAL",
+    "HARD": "HARD",
+
+    "START": "START",
+    "OPTIONS": "OPTIONS",
+
+    "GAME OVER": "GAME OVER",
+    "SCORE": "SCORE",
+
+    "CPM": "CPM",
+    "MODE": "MODE",
+    "LANG": "LANG",
+    "BACK": "BACK"
+}
