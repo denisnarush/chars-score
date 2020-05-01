@@ -46,7 +46,7 @@ export class G {
 
     async preload() {
         this.i18n = {};
-        const data = await fetch(`./../assets/i18n/${this.LANGS[this.LANG]}.json`);
+        const data = await fetch(`./assets/i18n/${this.LANGS[this.LANG]}.json`);
         const i18n = await data.json();
         this.i18n = i18n;
     }
