@@ -1,4 +1,6 @@
 export class G {
+    LANGS = ["EN"];
+    LANG = 0;
 
     constructor() {
         const width  = 40 * 9.6;
@@ -38,6 +40,19 @@ export class G {
         document.documentElement.style.height = "100%";
         document.documentElement.style.width = "100%";
         document.body.appendChild(canvas);
+
+        this.preload();
+    }
+
+    async preload() {
+        this.i18n = {};
+        const data = await fetch(`../assets/i18n/${this.LANGS[this.LANG]}.json`);
+        const i18n = await data.json();
+        this.i18n = i18n;
+    }
+
+    translate(value) {
+        return this.i18n[value] ? this.i18n[value] : value;
     }
 
     setState(state) {
