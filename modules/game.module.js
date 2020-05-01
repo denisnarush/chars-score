@@ -1,12 +1,11 @@
 export class G {
-    LANGS = ["EN"];
-    LANG = 0;
-
     constructor() {
         const width  = 40 * 9.6;
         const height = 30 * 9.6;
         // FPS
         const FPS = 1000 / 120;
+        this.LANGS = ["EN"];
+        this.LANG = 0;
 
         this.width = width;
         this.widthCenter = width / 2;
