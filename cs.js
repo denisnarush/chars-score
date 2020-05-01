@@ -1,6 +1,6 @@
-import * as STATES from "./states/_index.js";
+import * as STATES from "states/_index.js";
 
-import { G } from "./modules/game.module.js";
+import { G } from "modules/game.module.js";
 
 
 // Instance
