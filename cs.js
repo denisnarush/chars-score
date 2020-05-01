@@ -9,10 +9,7 @@ const CSGame = new G();
 CSGame.STATES = STATES;
 // CHAR LANGUAGES
 CSGame.LANGS = ["EN", "RU"];
-CSGame.LANGS_CHARS = [
-    ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
-    ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ы", "Ь", "Э", "Ю", "Я"]
-];
+CSGame.LANGS_CHARS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 CSGame.LANG = 0;
 // MODE | DIFFICULTY
 CSGame.MODS = ["EASY", "NORMAL", "HARD"];

@@ -1,5 +1,6 @@
 export const MENU_STATE = {
     update: function () {
+        const i18n = this.translate.bind(this);
         // DOWN
         if (this.CODES["40"]) {
             this.CODES["40"] = false;
@@ -23,8 +24,8 @@ export const MENU_STATE = {
         // DRAW MENU
         this.ctx.beginPath();
         this.ctx.font = "italic " + this.ctx.font;
-        this.ctx.fillText(`${this.MENU_ITEM === 0 ? ">" : ""} START ${this.MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 1 ? ">" : ""} OPTIONS ${this.MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
+        this.ctx.fillText(`${this.MENU_ITEM === 0 ? ">" : ""} ${i18n('START')} ${this.MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
+        this.ctx.fillText(`${this.MENU_ITEM === 1 ? ">" : ""} ${i18n('OPTIONS')} ${this.MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
         this.ctx.closePath();
     }
 }

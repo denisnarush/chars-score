@@ -7,7 +7,7 @@ function addChar() {
         // TOP
         y: 0,
         // CHAR
-        c: this.LANGS_CHARS[this.LANG][Math.floor(Math.random() * this.LANGS_CHARS[this.LANG].length)],
+        c: this.LANGS_CHARS[Math.floor(Math.random() * this.LANGS_CHARS.length)],
         // TIME
         t: performance.now()
     };

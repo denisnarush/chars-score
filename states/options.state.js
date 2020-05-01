@@ -1,5 +1,6 @@
 export const OPTIONS_STATE = {
-    update: function () {
+    update: async function () {
+        const i18n = this.translate.bind(this);
         // ENTER
         if (this.CODES["13"] && this.MENU_ITEM === 3) {
             this.CODES["13"] = false;
@@ -34,7 +35,10 @@ export const OPTIONS_STATE = {
                     return this.MODE = this.MODE <= 0 ? 0 : this.MODE - 1;
                 }
                 case 2: {
-                    return this.LANG = this.LANG <= 0 ? 0 : this.LANG - 1;
+                    this.LANG = this.LANG <= 0 ? 0 : this.LANG - 1;
+                    await this.preload();
+                    this.LANGS_CHARS = this.i18n._CHARS;
+                    return
                 }
             }
         }
@@ -54,7 +58,10 @@ export const OPTIONS_STATE = {
                     return this.MODE = this.MODE >= this.MODS.length - 1 ? this.MODE = this.MODS.length - 1 : this.MODE + 1;
                 }
                 case 2: {
-                    return this.LANG = this.LANG >= this.LANGS.length - 1 ? this.LANG = this.LANGS.length - 1 : this.LANG + 1;
+                    this.LANG = this.LANG >= this.LANGS.length - 1 ? this.LANG = this.LANGS.length - 1 : this.LANG + 1;
+                    await this.preload();
+                    this.LANGS_CHARS = this.i18n._CHARS;
+                    return
                 }
             }
         }
@@ -71,10 +78,10 @@ export const OPTIONS_STATE = {
         // Draw Options
         this.ctx.beginPath();
         this.ctx.font = "italic " + this.ctx.font;
-        this.ctx.fillText(`${this.MENU_ITEM === 0 ? ">" : ""} CPM: ${this.CPM} ${this.MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 24 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 1 ? ">" : ""} MODE: ${this.MODS[this.MODE]} ${this.MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 2 ? ">" : ""} LANG: ${this.LANGS[this.LANG]} ${this.MENU_ITEM === 2 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 3 ? ">" : ""} BACK ${this.MENU_ITEM === 3 ? "<" : ""}`, this.widthCenter, this.heightCenter + 24 * 1.4);
+        this.ctx.fillText(`${this.MENU_ITEM === 0 ? ">" : ""} ${i18n('CPM')}: ${this.CPM} ${this.MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 24 * 1.4);
+        this.ctx.fillText(`${this.MENU_ITEM === 1 ? ">" : ""} ${i18n('MODE')}: ${i18n(this.MODS[this.MODE])} ${this.MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
+        this.ctx.fillText(`${this.MENU_ITEM === 2 ? ">" : ""} ${i18n('LANG')}: ${i18n(this.LANGS[this.LANG])} ${this.MENU_ITEM === 2 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
+        this.ctx.fillText(`${this.MENU_ITEM === 3 ? ">" : ""} ${i18n('BACK')} ${this.MENU_ITEM === 3 ? "<" : ""}`, this.widthCenter, this.heightCenter + 24 * 1.4);
         this.ctx.closePath();
     }
 }
