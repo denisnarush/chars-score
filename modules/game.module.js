@@ -1,11 +1,11 @@
+import { NOP } from "./../helpers/index.js";
+
 export class G {
     constructor() {
         const width  = 40 * 9.6;
         const height = 30 * 9.6;
         // FPS
         const FPS = 1000 / 120;
-        this.LANGS = ["EN"];
-        this.LANG = 0;
 
         this.width = width;
         this.widthCenter = width / 2;
@@ -24,6 +24,7 @@ export class G {
 
         const ctx = canvas.getContext("2d");
         ctx.font = "100 16px monospace";
+        ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         this.ctx = ctx;
@@ -39,46 +40,59 @@ export class G {
         document.documentElement.style.height = "100%";
         document.documentElement.style.width = "100%";
         document.body.appendChild(canvas);
-
-        this.preload();
     }
 
     async preload() {
-        this.i18n = {};
+        this.i18nJSON = {};
         const data = await fetch(`./assets/i18n/${this.LANGS[this.LANG]}.json`);
         const i18n = await data.json();
-        this.i18n = i18n;
+        this.i18nJSON = i18n;
     }
 
-    translate(value) {
-        return this.i18n[value] ? this.i18n[value] : value;
+    i18n(value) {
+        return this.i18nJSON[value] ? this.i18nJSON[value] : value;
+    }
+}
+
+G.prototype.setState = function (state) {
+    this.state = Object.assign({}, state);
+
+    if (this.state.update instanceof Function !== true) {
+        this.state.update = NOP.bind(this);
+    } else {
+        this.state.update = this.state.update.bind(this);
     }
 
-    setState(state) {
-        this.state = state;
-        this.state.update || (this.state.update = function () {});
-        requestAnimationFrame(this.loop.bind(this))
-    }
+    this.ctx.fillRect(0, 0, this.width, this.height);
 
-    loop() {
-        const now = performance.now();
-        if (now > this.t + this.fps) {
-            if (now > this.t + this.fps * 3) {
-                this.t = now;
-                return requestAnimationFrame(this.loop.bind(this));
-            } else {
-                this.t = this.t + this.fps;
-            }
+    requestAnimationFrame( () => this.loop() );
+}
 
-            this.ctx.beginPath();
-            this.ctx.fillRect(0, 0, this.width, this.height);
-            this.ctx.closePath();
+G.prototype.loop = function () {
+    const now = performance.now();
 
-            this.ctx.save();
-            this.ctx.fillStyle = "white";
-            this.state.update.call(this);
-            this.ctx.restore();
+    if (now > this.t + this.fps) {
+        if (now > this.t + this.fps * 3) {
+            this.t = now;
+            return requestAnimationFrame( () => this.loop() );
+        } else {
+            this.t = this.t + this.fps;
         }
-        requestAnimationFrame(this.loop.bind(this))
+
+        this.fillCleanRect();
+
+        this.ctx.save();
+        this.state.update();
+        this.ctx.restore();
     }
+
+    return requestAnimationFrame( () => this.loop() );
+}
+
+G.prototype.fillCleanRect = function () {
+    this.ctx.save();
+    this.ctx.fillStyle = "black";
+    this.ctx.rect(0, 0, this.width, this.height);
+    this.ctx.fill();
+    this.ctx.restore();
 }

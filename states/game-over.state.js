@@ -1,6 +1,11 @@
+import { drawMenu, SETTINGS } from "./../helpers/index.js";
+
 export const GAME_OVER_STATE = {
     update: function () {
-        const i18n = this.translate.bind(this);
+        const i18n = (v) => this.i18n(v);
+        if(this.SCORE > SETTINGS.get("SCORE")) {
+            SETTINGS.set("SCORE", this.SCORE)
+        }
         // BACKSPACE
         if (this.CODES["8"]) {
             this.CODES["8"] = false;
@@ -16,11 +21,10 @@ export const GAME_OVER_STATE = {
             this.CODES["13"] = false;
             return this.setState(this.STATES.MENU_STATE);
         }
-        // Draw MENU_STATE
-        this.ctx.beginPath();
-        this.ctx.font = "italic " + this.ctx.font;
-        this.ctx.fillText(`${i18n('GAME OVER')}`, this.widthCenter, this.heightCenter - 8 * 1.4);
-        this.ctx.fillText(`${i18n('SCORE')}: ${this.SCORE}`, this.widthCenter, this.heightCenter + 8 * 1.4);
-        this.ctx.closePath();
+        // Draw menu like results
+        drawMenu.call(this, [
+            `${i18n('GAME OVER')}`,
+            `${i18n('SCORE')}: ${this.SCORE}`
+        ]);
     }
 }

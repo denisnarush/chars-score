@@ -1,6 +1,9 @@
+import { drawMenu, SETTINGS } from "./../helpers/index.js";
+
 export const OPTIONS_STATE = {
-    update: async function () {
-        const i18n = this.translate.bind(this);
+    menu: ["CPM", "MODE", "LANG", "BACK"],
+    update: function () {
+        const i18n = (v) => this.i18n(v);
         // ENTER
         if (this.CODES["13"] && this.MENU_ITEM === 3) {
             this.CODES["13"] = false;
@@ -29,15 +32,26 @@ export const OPTIONS_STATE = {
             this.CODES["37"] = false;
             switch (this.MENU_ITEM) {
                 case 0: {
-                    return this.CPM = this.CPM <= 10 ? 10 : this.CPM - 10;
+                    this.CPM = SETTINGS.get("CPM");
+                    if (this.CPM !== 10) {
+                        this.CPM = this.CPM - 10;
+                        SETTINGS.set("CPM", this.CPM);
+                    }
+                    return
                 }
                 case 1: {
-                    return this.MODE = this.MODE <= 0 ? 0 : this.MODE - 1;
+                    if (this.MODE !== 0) {
+                        SETTINGS.set("MODE", --this.MODE);
+                    }
+                    return
                 }
                 case 2: {
-                    this.LANG = this.LANG <= 0 ? 0 : this.LANG - 1;
-                    await this.preload();
-                    this.LANGS_CHARS = this.i18n._CHARS;
+                    if (this.LANG !== 0) {
+                        SETTINGS.set("LANG", --this.LANG);
+                        this.preload().then( () => {
+                            this.LANGS_CHARS = this.i18n('_CHARS');
+                        });
+                    }
                     return
                 }
             }
@@ -52,15 +66,24 @@ export const OPTIONS_STATE = {
             this.CODES["39"] = false;
             switch (this.MENU_ITEM) {
                 case 0: {
-                    return this.CPM = this.CPM + 10;
+                    this.CPM = SETTINGS.get("CPM");
+                    this.CPM = this.CPM + 10;
+                    SETTINGS.set("CPM", this.CPM);
+                    return
                 }
                 case 1: {
-                    return this.MODE = this.MODE >= this.MODS.length - 1 ? this.MODE = this.MODS.length - 1 : this.MODE + 1;
+                    if (this.MODE !== this.MODS.length - 1) {
+                        SETTINGS.set("MODE", ++this.MODE);
+                    }
+                    return
                 }
                 case 2: {
-                    this.LANG = this.LANG >= this.LANGS.length - 1 ? this.LANG = this.LANGS.length - 1 : this.LANG + 1;
-                    await this.preload();
-                    this.LANGS_CHARS = this.i18n._CHARS;
+                    if (this.LANG !== this.LANGS.length - 1) {
+                        SETTINGS.set("LANG", ++this.LANG);
+                        this.preload().then( () => {
+                            this.LANGS_CHARS = this.i18n('_CHARS');
+                        });
+                    }
                     return
                 }
             }
@@ -75,13 +98,12 @@ export const OPTIONS_STATE = {
             this.CODES["27"] = false;
             return this.setState(this.STATES.MENU_STATE);
         }
-        // Draw Options
-        this.ctx.beginPath();
-        this.ctx.font = "italic " + this.ctx.font;
-        this.ctx.fillText(`${this.MENU_ITEM === 0 ? ">" : ""} ${i18n('CPM')}: ${this.CPM} ${this.MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 24 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 1 ? ">" : ""} ${i18n('MODE')}: ${i18n(this.MODS[this.MODE])} ${this.MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 2 ? ">" : ""} ${i18n('LANG')}: ${i18n(this.LANGS[this.LANG])} ${this.MENU_ITEM === 2 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 3 ? ">" : ""} ${i18n('BACK')} ${this.MENU_ITEM === 3 ? "<" : ""}`, this.widthCenter, this.heightCenter + 24 * 1.4);
-        this.ctx.closePath();
+        // Draw Menu
+        drawMenu.call(this, [
+            `${i18n('CPM')}: ${SETTINGS.get("CPM")}`,
+            `${i18n('MODE')}: ${i18n(this.MODS[this.MODE])}`,
+            `${i18n('LANG')}: ${i18n(this.LANGS[this.LANG])}`,
+            `${i18n('BACK')}`,
+        ], this.MENU_ITEM);
     }
 }

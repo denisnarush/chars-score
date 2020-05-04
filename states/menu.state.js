@@ -1,15 +1,22 @@
+import { drawMenu } from "./../helpers/index.js";
+
 export const MENU_STATE = {
+    menu: ["START", "OPTIONS"],
     update: function () {
-        const i18n = this.translate.bind(this);
+        const i18n = (v) => this.i18n(v);
         // DOWN
         if (this.CODES["40"]) {
             this.CODES["40"] = false;
-            this.MENU_ITEM = this.MENU_ITEM >= 1 ? 1 : this.MENU_ITEM + 1;
+            if (this.MENU_ITEM !== MENU_STATE.menu.length - 1) {
+                ++this.MENU_ITEM;
+            }
         }
         // UP
         if (this.CODES["38"]) {
             this.CODES["38"] = false;
-            this.MENU_ITEM = this.MENU_ITEM <= 0 ? 0 : this.MENU_ITEM - 1
+            if (this.MENU_ITEM !== 0) {
+                --this.MENU_ITEM;
+            }
         }
         // ENTER
         if (this.CODES["13"]) {
@@ -21,11 +28,7 @@ export const MENU_STATE = {
             this.CODES["32"] = false;
             return this.setStateFromMenu();
         }
-        // DRAW MENU
-        this.ctx.beginPath();
-        this.ctx.font = "italic " + this.ctx.font;
-        this.ctx.fillText(`${this.MENU_ITEM === 0 ? ">" : ""} ${i18n('START')} ${this.MENU_ITEM === 0 ? "<" : ""}`, this.widthCenter, this.heightCenter - 8 * 1.4);
-        this.ctx.fillText(`${this.MENU_ITEM === 1 ? ">" : ""} ${i18n('OPTIONS')} ${this.MENU_ITEM === 1 ? "<" : ""}`, this.widthCenter, this.heightCenter + 8 * 1.4);
-        this.ctx.closePath();
+        // DRAW Menu
+        drawMenu.call(this, MENU_STATE.menu.map( item => i18n(item) ), this.MENU_ITEM);
     }
 }
