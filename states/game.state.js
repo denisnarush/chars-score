@@ -1,3 +1,5 @@
+import { SETTINGS } from "./../helpers/index.js";
+
 // Add Char
 function addChar() {
     // CHAR
@@ -22,10 +24,13 @@ function updateChars() {
     }
     // Time
     const now = performance.now();
+    this.ctx.save();
     // Iteration
-    this.ctx.beginPath();
     this.ctx.textAlign = "center";
-    this.ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+
+    if (this.MODE !== 0) {
+        this.ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+    }
     // Char fall speed
     const speed = this.fps / (50 - Math.floor(this.SCORE / 25));
     // Update
@@ -40,16 +45,19 @@ function updateChars() {
             return this.setState(this.STATES.GAME_OVER_STATE);
         };
         // Draw Char
+        this.ctx.beginPath();
         this.ctx.fillText(`${char.c}`, char.x, char.y);
+        this.ctx.closePath();
     });
 
+    this.ctx.restore();
 
     // Highlight last char in NORMAL and HARD mode
     if (this.MODE !== 0) {
+        this.ctx.beginPath();
         this.ctx.fillText(`${this.CHARS[0].c}`, this.CHARS[0].x, this.CHARS[0].y);
+        this.ctx.closePath();
     }
-
-    this.ctx.closePath();
 
     // Return if no key
     if (!this.KEY) {
@@ -66,7 +74,7 @@ function updateChars() {
             // You can shoot at any chars
             if (index !== -1) {
                 this.CHARS.splice(index, 1);
-                this.SCORE = this.SCORE + 1;
+                this.CPM = Math.floor(++this.SCORE / 10 + SETTINGS.get("CPM"));
             }
             return
         }
@@ -75,7 +83,7 @@ function updateChars() {
             // You can shoot in chars only in fall-up order
             if (index === 0) {
                 this.CHARS.shift();
-                this.SCORE = this.SCORE + 1;
+                this.CPM = Math.floor(++this.SCORE / 10 + SETTINGS.get("CPM"));
             }
             return
         }
@@ -83,10 +91,10 @@ function updateChars() {
         case 2: {
             // If you miss game will add new char skipping
             if (index === -1 || index !== 0) {
-                this.T = now - 90000 / (Math.floor(this.SCORE / 10 + this.CPM));
+                this.T = now - 90000 / this.CPM;
             } else if (index === 0) {
                 this.CHARS.shift();
-                this.SCORE = this.SCORE + 1;
+                this.CPM = Math.floor(++this.SCORE / 10 + SETTINGS.get("CPM"));
             }
             return
         }
@@ -106,12 +114,12 @@ export const GAME_STATE = {
             this.CODES["27"] = false;
             return this.setState(this.STATES.MENU_STATE);
         }
-        // this.SCORE to the title
-        document.title = `${this.TITLE} ${Math.floor(this.SCORE / 10 + this.CPM)}/${this.SCORE}`;
+        // SCORE to the title
+        document.title = `${this.TITLE} ${this.CPM}/${this.SCORE}`;
         // Now
-        const now = Math.floor(performance.now());
+        const now = performance.now();
         // Delta for adding new char
-        const d = 60000 / (Math.floor(this.SCORE / 10 + this.CPM));
+        const d = 60000 / this.CPM;
         // Adding Char ?
         if (now > this.T + d) {
             if (now > this.T + d * 3) {

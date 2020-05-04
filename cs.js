@@ -1,6 +1,8 @@
+import { G } from "./modules/game.module.js";
+import { SETTINGS } from "./helpers/index.js";
+
 import * as STATES from "./states/index.js";
 
-import { G } from "./modules/game.module.js";
 
 
 // Instance
@@ -9,11 +11,10 @@ const CSGame = new G();
 CSGame.STATES = STATES;
 // CHAR LANGUAGES
 CSGame.LANGS = ["EN", "RU"];
-CSGame.LANGS_CHARS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-CSGame.LANG = 0;
+CSGame.LANG = SETTINGS.get("LANG");
 // MODE | DIFFICULTY
 CSGame.MODS = ["EASY", "NORMAL", "HARD"];
-CSGame.MODE = 1;
+CSGame.MODE = SETTINGS.get("MODE");
 // KEY CODES
 CSGame.CODES = {
     8  : false, // BACKSPACE
@@ -38,7 +39,7 @@ CSGame.CHARS = [];
 // TIME
 CSGame.T = 0;
 // Char Per Minute
-CSGame.CPM = 30;
+CSGame.CPM = SETTINGS.get("CPM");
 // Set State From Menu
 CSGame.setStateFromMenu = function () {
     switch (this.MENU_ITEM) {
@@ -56,6 +57,7 @@ CSGame.setStateFromMenu = function () {
 CSGame.restart = function () {
     this.T = performance.now();
     this.KEY = "";
+    this.CPM = SETTINGS.get("CPM");
     this.CHARS = [];
     this.SCORE = 0;
 };
@@ -76,4 +78,8 @@ window.addEventListener("keypress", (event) => {
     CSGame.KEY = String.fromCharCode(event.charCode).toUpperCase();
 });
 
-CSGame.setState(CSGame.STATES.MENU_STATE);
+CSGame.preload().then( () => {
+    CSGame.LANGS_CHARS = CSGame.i18nJSON._CHARS;
+    CSGame.setState(CSGame.STATES.MENU_STATE);
+})
+
