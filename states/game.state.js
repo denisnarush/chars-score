@@ -66,7 +66,7 @@ function updateChars() {
             
                 if (b == a) { return 0; }
             });
-            scoreboard.pop();
+            scoreboard[this.MODE][this.LANG].pop();
             SETTINGS.set("SCOREBOARD", scoreboard);
 
             return this.setState(this.STATES.GAME_OVER_STATE);
