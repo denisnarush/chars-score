@@ -56,6 +56,12 @@ function updateChars() {
         }
         // Condition for Game Over
         if (char.y - 5 >= this.height) {
+            // Scoreboard update
+            const scoreboard = SETTINGS.get("SCOREBOARD");
+            scoreboard[this.MODE][this.LANG].push(this.SCORE);
+            scoreboard[this.MODE][this.LANG].sort().reverse().pop();
+            SETTINGS.set("SCOREBOARD", scoreboard);
+
             return this.setState(this.STATES.GAME_OVER_STATE);
         };
         // Draw Char

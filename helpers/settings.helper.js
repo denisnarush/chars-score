@@ -21,6 +21,23 @@ export const SETTINGS = {
                     obj.SCORE = 0;
                     break;
                 }
+                case 'SCOREBOARD': {
+                    obj.SCOREBOARD = [
+                        [
+                            [0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0]
+                        ],
+                        [
+                            [0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0]
+                        ],
+                        [
+                            [0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0]
+                        ]
+                    ];
+                    break;
+                }
                 case 'LANG': {
                     obj.LANG = 0;
                     break;

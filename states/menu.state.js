@@ -1,7 +1,7 @@
 import { drawMenu } from "./../helpers/index.js";
 
 export const MENU_STATE = {
-    menu: ["START", "OPTIONS"],
+    menu: ["START", "OPTIONS", "SCOREBOARD"],
     update: function () {
         const i18n = (v) => this.i18n(v);
         // DOWN
