@@ -59,7 +59,7 @@ function updateChars() {
             // Scoreboard update
             const scoreboard = SETTINGS.get("SCOREBOARD");
             scoreboard[this.MODE][this.LANG].push(this.SCORE);
-            scoreboard[this.MODE][this.LANG].sort((b, a) => {
+            scoreboard[this.MODE][this.LANG].sort((a, b) => {
                 if (b > a) { return 1 }
             
                 if (b < a) { return -1 }
