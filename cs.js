@@ -51,6 +51,9 @@ CSGame.setStateFromMenu = function () {
             this.MENU_ITEM = 0;
             return this.setState(this.STATES.OPTIONS_STATE);
         }
+        case 2: {
+            return this.setState(this.STATES.SCOREBOARD_STATE);
+        }
     }
 };
 // Restart

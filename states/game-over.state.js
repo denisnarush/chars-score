@@ -1,11 +1,8 @@
-import { drawMenu, SETTINGS } from "./../helpers/index.js";
+import { drawMenu } from "./../helpers/index.js";
 
 export const GAME_OVER_STATE = {
     update: function () {
         const i18n = (v) => this.i18n(v);
-        if(this.SCORE > SETTINGS.get("SCORE")) {
-            SETTINGS.set("SCORE", this.SCORE)
-        }
         // BACKSPACE
         if (this.CODES["8"]) {
             this.CODES["8"] = false;

@@ -1,15 +1,29 @@
-import { SETTINGS } from "./../helpers/index.js";
+import { SETTINGS, randomCharWithExcept, randomWithExcept } from "./../helpers/index.js";
 
 // Add Char
 function addChar() {
+    let c = randomCharWithExcept(this.LANGS_CHARS);
+    let x = randomWithExcept(40);
+
+    if (this.CHARS.length) {
+        const last = this.CHARS[this.CHARS.length - 1];
+
+        if (last.c === c) {
+            c = randomCharWithExcept(this.LANGS_CHARS, c);
+        }
+
+        if (last.x === (x * 9.6 - 4.8)) {
+            x = randomWithExcept(40, x);
+        }
+    }
     // CHAR
     const char = {
-        // 0 - 40 col
-        x: Math.floor(Math.random() * 40 + 1) * 9.6 - 4.8,
+        // CHAR
+        c: c,
+        // COL
+        x: x * 9.6 - 4.8,
         // TOP
         y: 0,
-        // CHAR
-        c: this.LANGS_CHARS[Math.floor(Math.random() * this.LANGS_CHARS.length)],
         // TIME
         t: performance.now()
     };
@@ -41,7 +55,13 @@ function updateChars() {
             char.y = char.y + speed;
         }
         // Condition for Game Over
-        if (char.y >= this.height) {
+        if (char.y - 5 >= this.height) {
+            // Scoreboard update
+            const scoreboard = SETTINGS.get("SCOREBOARD");
+            scoreboard[this.MODE][this.LANG].push(this.SCORE);
+            scoreboard[this.MODE][this.LANG].sort().reverse().pop();
+            SETTINGS.set("SCOREBOARD", scoreboard);
+
             return this.setState(this.STATES.GAME_OVER_STATE);
         };
         // Draw Char
