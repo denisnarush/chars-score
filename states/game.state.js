@@ -1,4 +1,4 @@
-import { SETTINGS, randomCharWithExcept, randomWithExcept } from "./../helpers/index.js";
+import { randomCharWithExcept, randomWithExcept } from "./../helpers/index.js";
 
 // Add Char
 function addChar() {
@@ -57,7 +57,7 @@ function updateChars() {
         // Condition for Game Over
         if (char.y - 5 >= this.height) {
             // Scoreboard update
-            const scoreboard = SETTINGS.get("SCOREBOARD");
+            const scoreboard = this.settings.get("SCOREBOARD");
             scoreboard[this.MODE][this.LANG].push(this.SCORE);
             scoreboard[this.MODE][this.LANG].sort((a, b) => {
                 if (b > a) { return 1 }
@@ -67,7 +67,7 @@ function updateChars() {
                 if (b == a) { return 0; }
             });
             scoreboard[this.MODE][this.LANG].pop();
-            SETTINGS.set("SCOREBOARD", scoreboard);
+            this.settings.set("SCOREBOARD", scoreboard);
 
             return this.setState(this.STATES.GAME_OVER_STATE);
         };
@@ -87,13 +87,12 @@ function updateChars() {
     }
 
     // Return if no key
-    if (!this.KEY) {
+    if (this.inputs.getKeys().length === 0) {
         return false;
     }
+
     // Removing char
-    const index = this.CHARS.findIndex( char => this.KEY === char.c );
-    // Clean key
-    this.KEY = undefined;
+    const index = this.CHARS.findIndex( char => this.inputs.isOn(char.c.charCodeAt(0)) );
 
     switch (this.MODE) {
     /* YEASY LVL */
@@ -101,7 +100,7 @@ function updateChars() {
             // You can shoot at any chars
             if (index !== -1) {
                 this.CHARS.splice(index, 1);
-                this.CPM = Math.floor(++this.SCORE / 10 + SETTINGS.get("CPM"));
+                this.CPM = Math.floor(++this.SCORE / 10 + this.settings.get("CPM"));
             }
             return
         }
@@ -110,7 +109,7 @@ function updateChars() {
             // You can shoot in chars only in fall-up order
             if (index === 0) {
                 this.CHARS.shift();
-                this.CPM = Math.floor(++this.SCORE / 10 + SETTINGS.get("CPM"));
+                this.CPM = Math.floor(++this.SCORE / 10 + this.settings.get("CPM"));
             }
             return
         }
@@ -121,7 +120,7 @@ function updateChars() {
                 this.T = now - 90000 / this.CPM;
             } else if (index === 0) {
                 this.CHARS.shift();
-                this.CPM = Math.floor(++this.SCORE / 10 + SETTINGS.get("CPM"));
+                this.CPM = Math.floor(++this.SCORE / 10 + this.settings.get("CPM"));
             }
             return
         }
@@ -132,13 +131,11 @@ function updateChars() {
 export const GAME_STATE = {
     update: function () {
         // BACKSPACE
-        if (this.CODES["8"]) {
-            this.CODES["8"] = false;
+        if (this.inputs.isOn(8)) {
             return this.setState(this.STATES.MENU_STATE);
         }
         // ESC
-        if (this.CODES["27"]) {
-            this.CODES["27"] = false;
+        if (this.inputs.isOn(27)) {
             return this.setState(this.STATES.MENU_STATE);
         }
         // SCORE to the title
