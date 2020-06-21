@@ -1,27 +1,24 @@
-import { drawMenu, SETTINGS } from "./../helpers/index.js";
+import { drawMenu } from "./../helpers/index.js";
 
 export const SCOREBOARD_STATE = {
     update: function() {
         // ENTER
-        if (this.CODES["13"]) {
-            this.CODES["13"] = false;
+        if (this.inputs.isOn(13)) {
             this.MENU_ITEM = 2;
             return this.setState(this.STATES.MENU_STATE);
         }
         // BACKSPACE
-        if (this.CODES["8"]) {
-            this.CODES["8"] = false;
+        if (this.inputs.isOn(8)) {
             this.MENU_ITEM = 2;
             return this.setState(this.STATES.MENU_STATE);
         }
         // ESC
-        if (this.CODES["27"]) {
-            this.CODES["27"] = false;
+        if (this.inputs.isOn(27)) {
             this.MENU_ITEM = 2;
             return this.setState(this.STATES.MENU_STATE);
         }
 
-        const scoreboard = SETTINGS.get('SCOREBOARD')[this.MODE][this.LANG];
+        const scoreboard = this.settings.get('SCOREBOARD')[this.MODE][this.LANG];
 
         drawMenu.call(this, [
             `RANK       SCORE`,

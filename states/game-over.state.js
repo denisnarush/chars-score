@@ -2,26 +2,22 @@ import { drawMenu } from "./../helpers/index.js";
 
 export const GAME_OVER_STATE = {
     update: function () {
-        const i18n = (v) => this.i18n(v);
         // BACKSPACE
-        if (this.CODES["8"]) {
-            this.CODES["8"] = false;
+        if (this.inputs.isOn(8)) {
             return this.setState(this.STATES.MENU_STATE);
         }
         // ESC
-        if (this.CODES["27"]) {
-            this.CODES["27"] = false;
+        if (this.inputs.isOn(27)) {
             return this.setState(this.STATES.MENU_STATE);
         }
         // ENTER
-        if (this.CODES["13"]) {
-            this.CODES["13"] = false;
+        if (this.inputs.isOn(13)) {
             return this.setState(this.STATES.MENU_STATE);
         }
         // Draw menu like results
         drawMenu.call(this, [
-            `${i18n('GAME OVER')}`,
-            `${i18n('SCORE')}: ${this.SCORE}`
+            `${this.i18n('GAME OVER')}`,
+            `${this.i18n('SCORE')}: ${this.SCORE}`
         ]);
     }
 }

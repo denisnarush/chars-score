@@ -1,4 +1,6 @@
 import { NOP } from "./../helpers/index.js";
+import { Input } from "./input.module.js";
+import { Settings } from "./settings.module.js"
 
 export class G {
     constructor() {
@@ -6,6 +8,9 @@ export class G {
         const height = 30 * 9.6;
         // FPS
         const FPS = 1000 / 120;
+
+        this.inputs = new Input();
+        this.settings = new Settings('cs-settings');
 
         this.width = width;
         this.widthCenter = width / 2;
@@ -48,7 +53,7 @@ export class G {
         this.i18nJSON = i18n;
     }
 
-    i18n(value) {
+    i18n = (value) => {
         return this.i18nJSON[value] ? this.i18nJSON[value] : value;
     }
 }
@@ -84,6 +89,8 @@ G.prototype.loop = function () {
         this.state.update();
         this.ctx.restore();
     }
+
+    this.inputs.loop();
 
     return requestAnimationFrame( () => this.loop() );
 }

@@ -1,11 +1,16 @@
-export const SETTINGS = {
-    set: (key, value) => {
-        const obj = JSON.parse(localStorage.getItem('settings')) || {};
+export class Settings {
+    constructor(key) {
+        this.key = key;
+    }
+
+    set = (key, value) => {
+        const obj = JSON.parse(localStorage.getItem(this.key)) || {};
             obj[key] = value;
-        localStorage.setItem('settings', JSON.stringify(obj));
-    },
-    get: (key) => {
-        const obj = JSON.parse(localStorage.getItem('settings')) || {};
+        localStorage.setItem(this.key, JSON.stringify(obj));
+    }
+
+    get = (key) => {
+        const obj = JSON.parse(localStorage.getItem(this.key)) || {};
 
         if (obj.hasOwnProperty(key) === false) {
             switch(key) {
@@ -44,7 +49,7 @@ export const SETTINGS = {
                 }
             }
 
-            localStorage.setItem('settings', JSON.stringify(obj));
+            localStorage.setItem(this.key, JSON.stringify(obj));
         }
 
         return obj[key];
