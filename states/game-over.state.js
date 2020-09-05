@@ -16,8 +16,8 @@ export const GAME_OVER_STATE = {
         }
         // Draw menu like results
         drawMenu.call(this, [
-            `${this.i18n('GAME OVER')}`,
-            `${this.i18n('SCORE')}: ${this.SCORE}`
+            `${this.i18n("GAME OVER")}`,
+            `${this.i18n("SCORE")}: ${this.SCORE}`,
         ]);
-    }
-}
+    },
+};

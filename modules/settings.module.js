@@ -5,45 +5,49 @@ export class Settings {
 
     set = (key, value) => {
         const obj = JSON.parse(localStorage.getItem(this.key)) || {};
-            obj[key] = value;
+        obj[key] = value;
         localStorage.setItem(this.key, JSON.stringify(obj));
-    }
+    };
 
     get = (key) => {
         const obj = JSON.parse(localStorage.getItem(this.key)) || {};
 
         if (obj.hasOwnProperty(key) === false) {
-            switch(key) {
-                case 'CPM': {
+            switch (key) {
+                case "V": {
+                    obj.V = "1.3.8";
+                    break;
+                }
+                case "CPM": {
                     obj.CPM = 30;
                     break;
                 }
-                case 'MODE': {
+                case "MODE": {
                     obj.MODE = 1;
                     break;
                 }
-                case 'SCORE': {
+                case "SCORE": {
                     obj.SCORE = 0;
                     break;
                 }
-                case 'SCOREBOARD': {
+                case "SCOREBOARD": {
                     obj.SCOREBOARD = [
                         [
                             [0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0]
+                            [0, 0, 0, 0, 0],
                         ],
                         [
                             [0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0]
+                            [0, 0, 0, 0, 0],
                         ],
                         [
                             [0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0]
-                        ]
+                            [0, 0, 0, 0, 0],
+                        ],
                     ];
                     break;
                 }
-                case 'LANG': {
+                case "LANG": {
                     obj.LANG = 0;
                     break;
                 }
@@ -53,5 +57,5 @@ export class Settings {
         }
 
         return obj[key];
-    }
+    };
 }

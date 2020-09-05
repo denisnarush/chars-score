@@ -24,6 +24,10 @@ export const MENU_STATE = {
             return this.setStateFromMenu();
         }
         // DRAW Menu
-        drawMenu.call(this, MENU_STATE.menu.map( item => this.i18n(item) ), this.MENU_ITEM);
-    }
-}
+        drawMenu.call(
+            this,
+            MENU_STATE.menu.map((item) => this.i18n(item)),
+            this.MENU_ITEM
+        );
+    },
+};

@@ -31,52 +31,52 @@ export const OPTIONS_STATE = {
                         this.CPM = this.CPM - 10;
                         this.settings.set("CPM", this.CPM);
                     }
-                    return
+                    return;
                 }
                 case 1: {
                     if (this.MODE !== 0) {
                         this.settings.set("MODE", --this.MODE);
                     }
-                    return
+                    return;
                 }
                 case 2: {
                     if (this.LANG !== 0) {
                         this.settings.set("LANG", --this.LANG);
-                        this.preload().then( () => {
-                            this.LANGS_CHARS = this.i18n('_CHARS');
+                        this.preload().then(() => {
+                            this.LANGS_CHARS = this.i18n("_CHARS");
                         });
                     }
-                    return
+                    return;
                 }
             }
         }
         // UP
         if (this.inputs.isOn(38)) {
-            this.MENU_ITEM = this.MENU_ITEM <= 0 ? 0 : this.MENU_ITEM - 1
+            this.MENU_ITEM = this.MENU_ITEM <= 0 ? 0 : this.MENU_ITEM - 1;
         }
-        // RIGHT 
+        // RIGHT
         if (this.inputs.isOn(39)) {
             switch (this.MENU_ITEM) {
                 case 0: {
                     this.CPM = this.settings.get("CPM");
                     this.CPM = this.CPM + 10;
                     this.settings.set("CPM", this.CPM);
-                    return
+                    return;
                 }
                 case 1: {
                     if (this.MODE !== this.MODS.length - 1) {
                         this.settings.set("MODE", ++this.MODE);
                     }
-                    return
+                    return;
                 }
                 case 2: {
                     if (this.LANG !== this.LANGS.length - 1) {
                         this.settings.set("LANG", ++this.LANG);
-                        this.preload().then( () => {
-                            this.LANGS_CHARS = this.i18n('_CHARS');
+                        this.preload().then(() => {
+                            this.LANGS_CHARS = this.i18n("_CHARS");
                         });
                     }
-                    return
+                    return;
                 }
             }
         }
@@ -89,11 +89,15 @@ export const OPTIONS_STATE = {
             return this.setState(this.STATES.MENU_STATE);
         }
         // Draw Menu
-        drawMenu.call(this, [
-            `${this.i18n('CPM')}: ${this.settings.get("CPM")}`,
-            `${this.i18n('MODE')}: ${this.i18n(this.MODS[this.MODE])}`,
-            `${this.i18n('LANG')}: ${this.i18n(this.LANGS[this.LANG])}`,
-            `${this.i18n('BACK')}`,
-        ], this.MENU_ITEM);
-    }
-}
+        drawMenu.call(
+            this,
+            [
+                `${this.i18n("CPM")}: ${this.settings.get("CPM")}`,
+                `${this.i18n("MODE")}: ${this.i18n(this.MODS[this.MODE])}`,
+                `${this.i18n("LANG")}: ${this.i18n(this.LANGS[this.LANG])}`,
+                `${this.i18n("BACK")}`,
+            ],
+            this.MENU_ITEM
+        );
+    },
+};

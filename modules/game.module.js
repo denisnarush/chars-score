@@ -1,16 +1,16 @@
 import { NOP } from "./../helpers/index.js";
 import { Input } from "./input.module.js";
-import { Settings } from "./settings.module.js"
+import { Settings } from "./settings.module.js";
 
 export class G {
     constructor() {
-        const width  = 40 * 9.6;
+        const width = 40 * 9.6;
         const height = 30 * 9.6;
         // FPS
         const FPS = 1000 / 120;
 
         this.inputs = new Input();
-        this.settings = new Settings('cs-settings');
+        this.settings = new Settings("cs-settings");
 
         this.width = width;
         this.widthCenter = width / 2;
@@ -53,52 +53,52 @@ export class G {
         this.i18nJSON = i18n;
     }
 
-    i18n = (value) => {
+    i18n(value) {
         return this.i18nJSON[value] ? this.i18nJSON[value] : value;
     }
-}
 
-G.prototype.setState = function (state) {
-    this.state = Object.assign({}, state);
+    setState(state) {
+        this.state = Object.assign({}, state);
 
-    if (this.state.update instanceof Function !== true) {
-        this.state.update = NOP.bind(this);
-    } else {
-        this.state.update = this.state.update.bind(this);
-    }
-
-    this.ctx.fillRect(0, 0, this.width, this.height);
-
-    requestAnimationFrame( () => this.loop() );
-}
-
-G.prototype.loop = function () {
-    const now = performance.now();
-
-    if (now > this.t + this.fps) {
-        if (now > this.t + this.fps * 3) {
-            this.t = now;
-            return requestAnimationFrame( () => this.loop() );
+        if (this.state.update instanceof Function !== true) {
+            this.state.update = NOP.bind(this);
         } else {
-            this.t = this.t + this.fps;
+            this.state.update = this.state.update.bind(this);
         }
 
-        this.fillCleanRect();
+        this.ctx.fillRect(0, 0, this.width, this.height);
 
-        this.ctx.save();
-        this.state.update();
-        this.ctx.restore();
+        requestAnimationFrame(() => this.loop());
     }
 
-    this.inputs.loop();
+    loop() {
+        const now = performance.now();
 
-    return requestAnimationFrame( () => this.loop() );
-}
+        if (now > this.t + this.fps) {
+            if (now > this.t + this.fps * 3) {
+                this.t = now;
+                return requestAnimationFrame(() => this.loop());
+            } else {
+                this.t = this.t + this.fps;
+            }
 
-G.prototype.fillCleanRect = function () {
-    this.ctx.save();
-    this.ctx.fillStyle = "black";
-    this.ctx.rect(0, 0, this.width, this.height);
-    this.ctx.fill();
-    this.ctx.restore();
+            this.fillCleanRect();
+
+            this.ctx.save();
+            this.state.update();
+            this.ctx.restore();
+        }
+
+        this.inputs.loop();
+
+        return requestAnimationFrame(() => this.loop());
+    }
+
+    fillCleanRect() {
+        this.ctx.save();
+        this.ctx.fillStyle = "black";
+        this.ctx.rect(0, 0, this.width, this.height);
+        this.ctx.fill();
+        this.ctx.restore();
+    }
 }
