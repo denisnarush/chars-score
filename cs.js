@@ -1,7 +1,6 @@
 import { G } from "./modules/game.module.js";
 import * as STATES from "./states/index.js";
 
-
 // Instance
 const CSGame = new G();
 // CSGame.STATES
@@ -48,8 +47,7 @@ CSGame.restart = function () {
     this.SCORE = 0;
 };
 
-CSGame.preload().then( () => {
+CSGame.preload().then(() => {
     CSGame.LANGS_CHARS = CSGame.i18nJSON._CHARS;
     CSGame.setState(CSGame.STATES.MENU_STATE);
-})
-
+});

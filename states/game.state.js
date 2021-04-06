@@ -3,7 +3,7 @@ import { randomCharWithExcept, randomWithExcept } from "./../helpers/index.js";
 // Add Char
 function addChar() {
     let c = randomCharWithExcept(this.LANGS_CHARS);
-    let x = randomWithExcept(40);
+    let x = randomWithExcept(this.cellsX / 2);
 
     if (this.CHARS.length) {
         const last = this.CHARS[this.CHARS.length - 1];
@@ -12,8 +12,8 @@ function addChar() {
             c = randomCharWithExcept(this.LANGS_CHARS, c);
         }
 
-        if (last.x === x * 9.6 - 4.8) {
-            x = randomWithExcept(40, x);
+        if (last.x === x) {
+            x = randomWithExcept(this.cellsX / 2, x);
         }
     }
     // CHAR
@@ -21,7 +21,7 @@ function addChar() {
         // CHAR
         c: c,
         // COL
-        x: x * 9.6 - 4.8,
+        x: x,
         // TOP
         y: 0,
         // TIME
@@ -41,6 +41,7 @@ function updateChars() {
     this.ctx.save();
     // Iteration
     this.ctx.textAlign = "center";
+    this.ctx.font = "100 19px monospace";
 
     if (this.MODE !== 0) {
         this.ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
@@ -79,20 +80,16 @@ function updateChars() {
         }
         // Draw Char
         this.ctx.beginPath();
-        this.ctx.fillText(`${char.c}`, char.x, char.y);
+        this.ctx.fillText(`${char.c}`, char.x * this.cellSize2 + this.cellSize, char.y);
         this.ctx.closePath();
     });
-
-    this.ctx.restore();
 
     // Highlight last char in NORMAL and HARD mode
     if (this.MODE !== 0) {
         this.ctx.beginPath();
-        this.ctx.fillText(
-            `${this.CHARS[0].c}`,
-            this.CHARS[0].x,
-            this.CHARS[0].y
-        );
+        this.ctx.fillText(`${this.CHARS[0].c}`, this.CHARS[0].x * this.cellSize2 + this.cellSize, this.CHARS[0].y);
+        this.ctx.fillText(`${this.CHARS[0].c}`, this.CHARS[0].x * this.cellSize2 + this.cellSize, this.CHARS[0].y);
+        this.ctx.fillText(`${this.CHARS[0].c}`, this.CHARS[0].x * this.cellSize2 + this.cellSize, this.CHARS[0].y);
         this.ctx.closePath();
     }
 
@@ -102,9 +99,8 @@ function updateChars() {
     }
 
     // Removing char
-    const index = this.CHARS.findIndex((char) =>
-        this.inputs.isOn(char.c.charCodeAt(0))
-    );
+    const index = this.CHARS.findIndex((char) => this.inputs.isOn(char.c.charCodeAt(0)));
+    console.log(this.inputs.keys);
 
     switch (this.MODE) {
         /* YEASY LVL */
@@ -112,9 +108,7 @@ function updateChars() {
             // You can shoot at any chars
             if (index !== -1) {
                 this.CHARS.splice(index, 1);
-                this.CPM = Math.floor(
-                    ++this.SCORE / 10 + this.settings.get("CPM")
-                );
+                this.CPM = Math.floor(++this.SCORE / 10 + this.settings.get("CPM"));
             }
             return;
         }
@@ -123,9 +117,7 @@ function updateChars() {
             // You can shoot in chars only in fall-up order
             if (index === 0) {
                 this.CHARS.shift();
-                this.CPM = Math.floor(
-                    ++this.SCORE / 10 + this.settings.get("CPM")
-                );
+                this.CPM = Math.floor(++this.SCORE / 10 + this.settings.get("CPM"));
             }
             return;
         }
@@ -136,13 +128,12 @@ function updateChars() {
                 this.T = now - 90000 / this.CPM;
             } else if (index === 0) {
                 this.CHARS.shift();
-                this.CPM = Math.floor(
-                    ++this.SCORE / 10 + this.settings.get("CPM")
-                );
+                this.CPM = Math.floor(++this.SCORE / 10 + this.settings.get("CPM"));
             }
             return;
         }
     }
+    this.ctx.restore();
 }
 
 export const GAME_STATE = {

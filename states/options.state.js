@@ -71,10 +71,11 @@ export const OPTIONS_STATE = {
                 }
                 case 2: {
                     if (this.LANG !== this.LANGS.length - 1) {
-                        this.settings.set("LANG", ++this.LANG);
-                        this.preload().then(() => {
-                            this.LANGS_CHARS = this.i18n("_CHARS");
-                        });
+                        // TODO: RU is not working as expected. Disabled for now
+                        // this.settings.set("LANG", ++this.LANG);
+                        // this.preload().then(() => {
+                        // this.LANGS_CHARS = this.i18n("_CHARS");
+                        // });
                     }
                     return;
                 }

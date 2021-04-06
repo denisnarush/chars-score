@@ -6,17 +6,13 @@
  */
 export function drawMenu(menu, selectedId) {
     this.ctx.save();
+    this.ctx.font = "100 19px monospace";
     menu.forEach((item, id) => {
         this.ctx.beginPath();
         this.ctx.fillText(
-            `${selectedId === id ? ">" : ""} ${item} ${
-                selectedId === id ? "<" : ""
-            }`,
+            `${selectedId === id ? ">" : ""} ${item} ${selectedId === id ? "<" : ""}`,
             this.widthCenter,
-            this.heightCenter -
-                (16 * 1.4 * menu.length) / 2 +
-                16 * 1.4 * id +
-                8 * 1.4
+            this.heightCenter - -id * this.cellSize2 - (menu.length / 2) * this.cellSize2
         );
     });
     this.ctx.closePath();

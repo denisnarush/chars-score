@@ -4,31 +4,34 @@ import { Settings } from "./settings.module.js";
 
 export class G {
     constructor() {
-        const width = 40 * 9.6;
-        const height = 30 * 9.6;
         // FPS
         const FPS = 1000 / 120;
 
         this.inputs = new Input();
         this.settings = new Settings("cs-settings");
-
-        this.width = width;
-        this.widthCenter = width / 2;
-        this.height = height;
-        this.heightCenter = height / 2;
+        this.cellsX = 48;
+        this.cellsY = 30;
+        this.cellSize = 8;
+        this.cellSize2 = this.cellSize * 2;
+        this.cells = this.cellsX * this.cellsY;
+        this.width = this.cellsX * this.cellSize;
+        this.height = this.cellsY * this.cellSize;
+        this.widthCenter = this.width / 2;
+        this.heightCenter = this.height / 2;
 
         this.fps = FPS;
         this.t = performance.now();
 
         const canvas = document.createElement("canvas");
         canvas.style.imageRendering = "pixelated";
-        canvas.height = height;
-        canvas.width = width;
+        canvas.height = this.height;
+        canvas.width = this.width;
         canvas.style.height = "100%";
         canvas.style.width = "100%";
 
         const ctx = canvas.getContext("2d");
-        ctx.font = "100 16px monospace";
+        // 10, 19
+        ctx.font = "100 10px monospace";
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -87,6 +90,8 @@ export class G {
             this.ctx.save();
             this.state.update();
             this.ctx.restore();
+
+            // this.drawGrid();
         }
 
         this.inputs.loop();
@@ -99,6 +104,24 @@ export class G {
         this.ctx.fillStyle = "black";
         this.ctx.rect(0, 0, this.width, this.height);
         this.ctx.fill();
+        this.ctx.restore();
+    }
+
+    drawGrid() {
+        this.ctx.save();
+        this.ctx.lineWidth = 0.05;
+        this.ctx.strokeStyle = "rgba(255,255,255,1)";
+        let i = 0;
+        while (i <= this.cells - 1) {
+            this.ctx.strokeRect(
+                (i - Math.floor(i / this.cellsX) * this.cellsX) * this.cellSize,
+                Math.floor(i / this.cellsX) * this.cellSize,
+                this.cellSize,
+                this.cellSize
+            );
+            i++;
+        }
+
         this.ctx.restore();
     }
 }
